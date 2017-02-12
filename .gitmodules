@@ -73,4 +73,7 @@
 	url = git@github.com:tpope/vim-surround.git
 [submodule "vim/bundle/webapi-vim"]
 	path = vim/bundle/webapi-vim
-	url = git@github.com:mattn/webapi-vim.git
+  url = git@github.com:mattn/webapi-vim.git
+[submodule "vim/bundle/molokai"]
+	path = vim/bundle/molokai
+	url = git@github.com:tomasr/molokai.git
