@@ -120,6 +120,10 @@ inoremap <down> <esc>
 inoremap <left> <esc>
 inoremap <right> <esc>
 inoremap <up> <esc>
+" abbreviations
+cnoreabbrev W w
+cnoreabbrev Wq wq
+cnoreabbrev WQ wq
 " autocmd settings ------------------------------------------------------------
 if has("autocmd")
   autocmd BufRead,BufNewFile jquery.*.js set ft=javascript syntax=jquery
