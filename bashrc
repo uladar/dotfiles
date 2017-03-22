@@ -11,6 +11,13 @@ export DYLD_LIBRARY_PATH="/usr/local/mysql/lib:$DYLD_LIBRARY_PATH"
 export PATH="/usr/local/heroku/bin:$PATH"
 # macports: postgres 9.3 -------------------------------------------------------
 export PATH="/opt/local/lib/postgresql93/bin:$PATH";
+# Load the shell dotfiles, and then some: --------------------------------------
+# * ~/.path can be used to extend `$PATH`.
+# * ~/.extra can be used for other settings you don’t want to commit.
+for file in ~/.{path,bash_prompt,exports,aliases,functions,extra}; do
+  [ -r "$file" ] && [ -f "$file" ] && source "$file";
+done;
+unset file;
 # set a fancy prompt (non-color, unless we know we "want" color) ---------------
 case "$TERM" in
   xterm-color) color_prompt=yes;;
@@ -36,20 +43,19 @@ else
 fi
 unset color_prompt force_color_prompt
 # COMPLETION ------------------------------------------------------------------
-# macports: bash-completion ---------------------------------------------------
-if [ -f /opt/local/etc/bash_completion ]; then
-  . /opt/local/etc/bash_completion
-fi
-if [ -f /opt/local/etc/profile.d/bash_completion.sh ]; then
-  . /opt/local/etc/profile.d/bash_completion.sh
-fi
-# git compleatoin -------------------------------------------------------------
 export home_bin_path="$HOME/.bin"
+# git-completion -------------------------------------------------------------
 [[ -r $home_bin_path/git-completion.bash ]] && . $home_bin_path/git-completion.bash
 # heroku completion -----------------------------------------------------------
-[[ -r $home_bin_path/heroku_bash_completion.sh ]] && . $home_bin_path/heroku_bash_completion.sh
+#[[ -r $home_bin_path/generate_heroku_commands_and_options.sh ]] && . $home_bin_path/generate_heroku_commands_and_options.sh
+#[[ -r $home_bin_path/generate_heroku_aliases.sh ]] && . $home_bin_path/generate_heroku_aliases.sh
+#[[ -r $home_bin_path/heroku_bash_completion.sh ]] && . $home_bin_path/heroku_bash_completion.sh
+# bash-completion
+[[ -r $home_bin_path/bash-completion.bash ]] && . $home_bin_path/bash-completion.bash
+# brew bash-completion
+#[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
 # etc -------------------------------------------------------------------------
-export EDITOR='mvim'
+export EDITOR='vim'
 export CLICOLOR=1;
 export LSCOLORS=GxFxCxDxBxegedabagaced;
 export LC_ALL=$LANG
@@ -57,5 +63,24 @@ export LC_CTYPE="UTF-8"
 export LANG="en_US.UTF-8"
 export GREP_OPTIONS='--color=auto'
 export STORM_HOME="$HOME/.bin/apache-storm-0.9.3"
+GPG_TTY=$(tty)
+export GPG_TTY
+# aliases ---------------------------------------------------------------------
+alias gp="cd ~/Projects"
+alias gpw="cd ~/Projects/wasp"
+# Stopwatch
+alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date'
+# Google Chrome
+alias chrome='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'
+alias ff='/Applications/Firefox28.app/Contents/MacOS/firefox -p default-profile --browser &'
+# Show/hide hidden files in Finder
+alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
+# One of @janmoesen’s ProTip™s
+for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
+  alias "$method"="lwp-request -m '$method'"
+done
+# Print each PATH entry on a separate line
+alias path='echo -e ${PATH//:/\\n}'
 # add rvm to path -------------------------------------------------------------
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
