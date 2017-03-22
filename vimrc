@@ -120,8 +120,9 @@ inoremap <down> <esc>
 inoremap <left> <esc>
 inoremap <right> <esc>
 inoremap <up> <esc>
-" abbreviations
+" abbreviations ---------------------------------------------------------------
 cnoreabbrev W w
+cnoreabbrev Q q
 cnoreabbrev Wq wq
 cnoreabbrev WQ wq
 " autocmd settings ------------------------------------------------------------
@@ -166,6 +167,8 @@ let g:syntastic_enable_signs=1
 let g:syntastic_mode_map = { 'passive_filetypes': ['sass', 'scss'] }
 "disable syntastic in eruby
 let g:syntastic_disabled_filetypes = ['eruby', 'slimrb']
+" BufferExplorer --------------------------------------------------------------
+let g:bufExplorerShowRelativePath=1                        "show relative paths
 " NERDTree toggle -------------------------------------------------------------
 map <silent> <leader>n :NERDTreeToggle<CR>
 let g:NERDTreeWinPos="right"
