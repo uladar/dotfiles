@@ -1,7 +1,7 @@
 # my .bin directory  -----------------------------------------------------------
 export PATH="$HOME/.bin:$PATH";
 # macports ---------------------------------------------------------------------
-export PATH="/opt/local/bin:/opt/local/sbin:$PATH";
+export PATH="/opt/local/bin:/opt/local/sbin:/opt/local/lib:$PATH";
 # MySQL ------------------------------------------------------------------------
 export PATH="/usr/local/mysql/bin:/usr/local/bin:$PATH:$HOME/.src/RDSCli-1.15.001/bin"
 export DYLD_LIBRARY_PATH="/usr/local/mysql/lib:$DYLD_LIBRARY_PATH"
@@ -10,10 +10,13 @@ export DYLD_LIBRARY_PATH="/usr/local/mysql/lib:$DYLD_LIBRARY_PATH"
 # Added by the Heroku Toolbelt -------------------------------------------------
 export PATH="/usr/local/heroku/bin:$PATH"
 # macports: postgres 9.3 -------------------------------------------------------
-export PATH="/opt/local/lib/postgresql93/bin:$PATH";
+export PATH="/opt/local/lib/postgresql95/bin:$PATH";
 # Load the shell dotfiles, and then some: --------------------------------------
 # * ~/.path can be used to extend `$PATH`.
 # * ~/.extra can be used for other settings you don’t want to commit.
+export PATH="$PATH:/opt/local/libexec/qt5/bin/";
+# Fixing not found ncursesw while ncmpcpp compiling.
+export PKG_CONFIG_PATH="/opt/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 for file in ~/.{path,bash_prompt,exports,aliases,functions,extra}; do
   [ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
