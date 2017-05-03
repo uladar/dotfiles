@@ -18,3 +18,4 @@ tmp/**/*
 .sass-cache
 bin/extract_info
 undo/*
+bin/sms_stats
