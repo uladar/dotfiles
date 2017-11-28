@@ -88,7 +88,7 @@ set updatetime=250                        "time msec suggested by vim-gitgutter
 " command line editing --------------------------------------------------------
 set wildmode=list:longest          "specifies how command line completion works
 set wildignore=*.o,*.obj,*~,.byebug_history,*.log
-set wildignore+=vendor/ruby,public/images,public/system,app/assets/images,tmp
+set wildignore+=vendor/ruby,vendor/assets,coverage,public/images,public/system,app/assets/images,tmp,bower_components,node_modules
 set wildmenu
 " executing external commands -------------------------------------------------
 " running make and jumping to errors ------------------------------------------
@@ -167,6 +167,7 @@ let g:syntastic_enable_signs=1
 let g:syntastic_mode_map = { 'passive_filetypes': ['sass', 'scss'] }
 "disable syntastic in eruby
 let g:syntastic_disabled_filetypes = ['eruby', 'slimrb']
+let g:syntastic_html_tidy_ignore_errors = ['<ui-select> is not recognized!', '<ui-select-match> is not recognized!', '<ui-select-choices> is not recognized!', '<ui-select-no-choice> is not recognized!']
 " BufferExplorer --------------------------------------------------------------
 let g:bufExplorerShowRelativePath=1                        "show relative paths
 " NERDTree toggle -------------------------------------------------------------
