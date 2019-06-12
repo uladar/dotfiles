@@ -3,6 +3,7 @@
 .bundle
 .byebug_history
 .env
+.node-version
 db/*.sqlite3
 log/*.log
 rerun.txt
@@ -17,5 +18,6 @@ tmp/**/*
 .ruby-gemset
 .sass-cache
 bin/extract_info
+bin/orders_hourly_stats
 undo/*
 bin/sms_stats
