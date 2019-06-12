@@ -4,13 +4,14 @@ export PATH="$HOME/.bin:$PATH";
 export PATH="/opt/local/bin:/opt/local/sbin:/opt/local/lib:$PATH";
 # MySQL ------------------------------------------------------------------------
 export PATH="/usr/local/mysql/bin:/usr/local/bin:$PATH:$HOME/.src/RDSCli-1.15.001/bin"
-export DYLD_LIBRARY_PATH="/usr/local/mysql/lib:$DYLD_LIBRARY_PATH"
+#export DYLD_LIBRARY_PATH="/usr/local/mysql/lib:$DYLD_LIBRARY_PATH"
 #unset LD_LIBRARY_PATH    #fix for sudo warning with _dyld not defined
 #unset DYLD_LIBRARY_PATH  #fix for sudo warning with _dyld not defined
 # Added by the Heroku Toolbelt -------------------------------------------------
 export PATH="/usr/local/heroku/bin:$PATH"
 # macports: postgres 9.3 -------------------------------------------------------
 export PATH="/opt/local/lib/postgresql95/bin:$PATH";
+export PATH="$PATH:/opt/local/Library/Frameworks/Python.framework/Versions/2.7/bin/";
 # Load the shell dotfiles, and then some: --------------------------------------
 # * ~/.path can be used to extend `$PATH`.
 # * ~/.extra can be used for other settings you don’t want to commit.
@@ -60,7 +61,8 @@ export home_bin_path="$HOME/.bin"
 # etc -------------------------------------------------------------------------
 export EDITOR='vim'
 export CLICOLOR=1;
-export LSCOLORS=GxFxCxDxBxegedabagaced;
+#export LSCOLORS=GxFxCxDxBxegedabagaced;
+export LSCOLORS=ExFxBxDxCxegedabagacad
 export LC_ALL=$LANG
 export LC_CTYPE="UTF-8"
 export LANG="en_US.UTF-8"
@@ -85,5 +87,7 @@ for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
 done
 # Print each PATH entry on a separate line
 alias path='echo -e ${PATH//:/\\n}'
+# add nodenv to path
+eval "$(nodenv init -)"
 # add rvm to path -------------------------------------------------------------
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
