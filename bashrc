@@ -41,7 +41,9 @@ if [ -n "$force_color_prompt" ]; then
   fi
 fi
 if [ "$color_prompt" = yes ]; then
-  PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\][$(~/.rvm/bin/rvm-prompt)] \u\[\033[00m\]:\[\033[01;34m\]\W$(__git_ps1 " (%s)")\[\033[00m\]\$ '
+  # TODO: check rvm and rbenv version
+  # PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\][$(~/.rvm/bin/rvm-prompt)] \u\[\033[00m\]:\[\033[01;34m\]\W$(__git_ps1 " (%s)")\[\033[00m\]\$ '
+  PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\][$(rbenv version-name)] \u\[\033[00m\]:\[\033[01;34m\]\W$(__git_ps1 " (%s)")\[\033[00m\]\$ '
 else
   PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
@@ -57,7 +59,7 @@ export home_bin_path="$HOME/.bin"
 # bash-completion
 [[ -r $home_bin_path/bash-completion.bash ]] && . $home_bin_path/bash-completion.bash
 # brew bash-completion
-#[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
+[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
 # etc -------------------------------------------------------------------------
 export EDITOR='vim'
 export CLICOLOR=1;
@@ -89,5 +91,6 @@ done
 alias path='echo -e ${PATH//:/\\n}'
 # add nodenv to path
 eval "$(nodenv init -)"
+# temporary disable rvm
 # add rvm to path -------------------------------------------------------------
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
