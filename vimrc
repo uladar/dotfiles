@@ -1,6 +1,10 @@
 " grouping and ordering according :options
 " pathogen - must come first --------------------------------------------------
 execute pathogen#infect()
+" set rubydll path for macvim
+if has("gui_macvim")
+  set rubydll=~/.rvm/rubies/ruby-2.6.0/lib/libruby.2.6.dylib
+endif
 " theme -----------------------------------------------------------------------
 if has("gui_running")
   colorscheme onedark
@@ -10,6 +14,7 @@ elseif $COLORTERM == 'gnome-terminal'
 else
   colorscheme onedark
 endif
+set path+=**
 " important -------------------------------------------------------------------
 set nocompatible                                          "don't behave like VI
 " moving around, searching and patterns ---------------------------------------
@@ -136,7 +141,7 @@ if has("autocmd")
   autocmd BufNewFile,BufRead *.prawn set ft=ruby
   autocmd BufNewFile,BufRead *.skim set ft=slim
   autocmd BufNewFile,BufRead /opt/nginx/conf/* set ft=nginx
-  autocmd BufWritePre *.py,*.js,*.rb,*.coffee,*.erb,*.slim,*.skim :call <SID>StripTrailingWhitespaces()
+  autocmd BufWritePre *.py,*.js,*.rb,*.coffee,*.erb,*.slim,*.skim,*.rake :call <SID>StripTrailingWhitespaces()
   "add spell checking and automatic wrapping at the recommended 72 columns to you commit messages.
   "https://robots.thoughtbot.com/5-useful-tips-for-a-better-commit-message
   autocmd Filetype gitcommit setlocal spell textwidth=72
@@ -147,6 +152,7 @@ if has("autocmd")
   autocmd FileType ruby let g:rubycomplete_classes_in_global=1
   autocmd FileType ruby let g:rubycomplete_rails = 1
   autocmd FileType ruby let g:rubycomplete_load_gemfile = 1
+  autocmd filetype crontab setlocal nobackup nowritebackup
 endif
 " functions -------------------------------------------------------------------
 function! <SID>StripTrailingWhitespaces()
@@ -167,7 +173,7 @@ let g:syntastic_enable_signs=1
 let g:syntastic_mode_map = { 'passive_filetypes': ['sass', 'scss'] }
 "disable syntastic in eruby
 let g:syntastic_disabled_filetypes = ['eruby', 'slimrb']
-let g:syntastic_html_tidy_ignore_errors = ['<ui-select> is not recognized!', '<ui-select-match> is not recognized!', '<ui-select-choices> is not recognized!', '<ui-select-no-choice> is not recognized!']
+let g:syntastic_html_tidy_ignore_errors = ['<ui-select> is not recognized!', '<ui-select-match> is not recognized!', '<ui-select-choices> is not recognized!', '<ui-select-no-choice> is not recognized!', '<sb-input> is not recognized!', '<sb-errors-list> is not recognized!', '<sb-errors-list> is not recognized!', '<sb-date-picker> is not recognized!', '<sb-select> is not recognized!', 'discarding unexpected <sb-errors-list>', 'discarding unexpected <sb-errors-list>', 'discarding unexpected </sb-errors-list>', 'discarding unexpected <sb-input>', 'discarding unexpected </sb-input>', 'discarding unexpected <sb-date-picker>', 'discarding unexpected </sb-date-picker>', '<sb-location-picker> is not recognized!']
 " BufferExplorer --------------------------------------------------------------
 let g:bufExplorerShowRelativePath=1                        "show relative paths
 " NERDTree toggle -------------------------------------------------------------
@@ -179,7 +185,7 @@ nmap <silent> <leader>tf :CommandTFlush<CR>
 let g:CommandTMaxFiles = 55000
 " ctags -----------------------------------------------------------------------
 let Tlist_Ctags_Cmd='/opt/local/bin/ctags'                       "only for OS X
-map <Leader>rt :!ctags --extra=+f -R *<CR><CR>
+map <Leader>rt :!ctags --extra=+f -R * --exclude='*.js'<CR><CR>
 " ack -------------------------------------------------------------------------
 cnoreabbrev Ack Ack!
 nnoremap <Leader>a :Ack!<Space>
