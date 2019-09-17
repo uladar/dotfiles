@@ -1,23 +1,12 @@
 # my .bin directory  -----------------------------------------------------------
 export PATH="$HOME/.bin:$PATH";
-# macports ---------------------------------------------------------------------
-export PATH="/opt/local/bin:/opt/local/sbin:/opt/local/lib:$PATH";
 # MySQL ------------------------------------------------------------------------
-export PATH="/usr/local/mysql/bin:/usr/local/bin:$PATH:$HOME/.src/RDSCli-1.15.001/bin"
-#export DYLD_LIBRARY_PATH="/usr/local/mysql/lib:$DYLD_LIBRARY_PATH"
-#unset LD_LIBRARY_PATH    #fix for sudo warning with _dyld not defined
-#unset DYLD_LIBRARY_PATH  #fix for sudo warning with _dyld not defined
-# Added by the Heroku Toolbelt -------------------------------------------------
-export PATH="/usr/local/heroku/bin:$PATH"
-# macports: postgres 9.3 -------------------------------------------------------
-export PATH="/opt/local/lib/postgresql95/bin:$PATH";
-export PATH="$PATH:/opt/local/Library/Frameworks/Python.framework/Versions/2.7/bin/";
+#export PATH="/usr/local/mysql/bin:/usr/local/bin:$PATH:$HOME/.src/RDSCli-1.15.001/bin"
 # Load the shell dotfiles, and then some: --------------------------------------
 # * ~/.path can be used to extend `$PATH`.
 # * ~/.extra can be used for other settings you don’t want to commit.
-export PATH="$PATH:/opt/local/libexec/qt5/bin/";
-# Fixing not found ncursesw while ncmpcpp compiling.
-export PKG_CONFIG_PATH="/opt/local/lib/pkgconfig:$PKG_CONFIG_PATH"
+# Fixing not found ncursesw while ncmpcpp compiling ----------------------------
+#export PKG_CONFIG_PATH="/opt/local/lib/pkgconfig:$PKG_CONFIG_PATH"
 for file in ~/.{path,bash_prompt,exports,aliases,functions,extra}; do
   [ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
@@ -87,10 +76,10 @@ alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && kil
 for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
   alias "$method"="lwp-request -m '$method'"
 done
-# Print each PATH entry on a separate line
+# Print each PATH entry on a separate line ------------------------------------
 alias path='echo -e ${PATH//:/\\n}'
-# add nodenv to path
+# add nodenv to path ----------------------------------------------------------
 eval "$(nodenv init -)"
-# temporary disable rvm
-# add rvm to path -------------------------------------------------------------
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+# Installing Qt and compiling capybara webkit ---------------------------------
+# https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit#macos-high-sierra-1013-macos-sierra-1012-el-capitan-1011-and-yosemite-1010
+#export PATH="$(brew --prefix qt@5.5)/bin:$PATH"
