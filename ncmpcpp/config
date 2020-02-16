@@ -1,5 +1,7 @@
 lyrics_directory = ~/.ncmpcpp/lyrics
 
+mpd_music_dir = /Volumes/MacOS/Music/iTunes/iTunes Media/Music 
+
 # visualizer
 visualizer_fifo_path = "/tmp/mpd.fifo"
 visualizer_output_name = "my_fifo"
