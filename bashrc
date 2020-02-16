@@ -1,5 +1,6 @@
 # my .bin directory  -----------------------------------------------------------
 export PATH="$HOME/.bin:$PATH";
+export GOPATH="$HOME/.go";
 # MySQL ------------------------------------------------------------------------
 #export PATH="/usr/local/mysql/bin:/usr/local/bin:$PATH:$HOME/.src/RDSCli-1.15.001/bin"
 # Load the shell dotfiles, and then some: --------------------------------------
@@ -83,3 +84,17 @@ eval "$(nodenv init -)"
 # Installing Qt and compiling capybara webkit ---------------------------------
 # https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit#macos-high-sierra-1013-macos-sierra-1012-el-capitan-1011-and-yosemite-1010
 #export PATH="$(brew --prefix qt@5.5)/bin:$PATH"
+# export missing brew directory
+export PATH="/usr/local/sbin:$PATH"
+
+#docker env
+#export DOCKER_TLS_VERIFY="1"
+#export DOCKER_HOST="tcp://192.168.99.100:2376"
+#export DOCKER_CERT_PATH="/Users/vladi/.docker/machine/machines/default"
+#export DOCKER_MACHINE_NAME="default"
+# Run this command to configure your shell:
+#eval $(docker-machine env)
+
+# heroku autocomplete setup
+HEROKU_AC_BASH_SETUP_PATH=/Users/vladi/Library/Caches/heroku/autocomplete/bash_setup && test -f $HEROKU_AC_BASH_SETUP_PATH && source $HEROKU_AC_BASH_SETUP_PATH;
+export PATH="/usr/local/opt/tomcat@7/bin:$PATH"
