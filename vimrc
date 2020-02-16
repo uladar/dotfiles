@@ -54,7 +54,8 @@ set title                                        "show info in the window title
 " using the mouse -------------------------------------------------------------
 set mouse=a                                         "enable mouse for all modes
 " GUI -------------------------------------------------------------------------
-set guifont=DejaVu\ Sans\ Mono:h12    "list of font names to be used in the GUI
+"set guifont=DejaVu\ Sans\ Mono:h11    "list of font names to be used in the GUI
+set guifont=JetBrains\ Mono:h11    "list of font names to be used in the GUI
 set guioptions-=L                         "remove left-hand scrollbar in vsplit
 set guioptions-=l                                   "remove left-hand scrollbar
 set guioptions-=b                         "remove bottom (horizontal) scrollbar
@@ -92,8 +93,9 @@ set directory=~/.vim/swap                "list of directories for the swap file
 set updatetime=250                        "time msec suggested by vim-gitgutter
 " command line editing --------------------------------------------------------
 set wildmode=list:longest          "specifies how command line completion works
-set wildignore=*.o,*.obj,*~,.byebug_history,*.log
-set wildignore+=vendor/ruby,vendor/assets,coverage,public/images,public/system,app/assets/images,tmp,bower_components,node_modules
+" set autochdir
+set wildignore=*.o,*.obj,*~,.byebug_history,*.log,*.gif,*.png,*.jpg
+set wildignore+=vendor/ruby,vendor/assets,vendor/assets/fonts,coverage,public/images,public/system,app/assets/images/**,tmp,bower_components,node_modules
 set wildmenu
 " executing external commands -------------------------------------------------
 " running make and jumping to errors ------------------------------------------
@@ -184,7 +186,7 @@ let g:NERDTreeWinSize=40
 nmap <silent> <leader>tf :CommandTFlush<CR>
 let g:CommandTMaxFiles = 55000
 " ctags -----------------------------------------------------------------------
-let Tlist_Ctags_Cmd='/opt/local/bin/ctags'                       "only for OS X
+let Tlist_Ctags_Cmd='/usr/local/bin/ctags'                       "only for OS X
 map <Leader>rt :!ctags --extra=+f -R * --exclude='*.js'<CR><CR>
 " ack -------------------------------------------------------------------------
 cnoreabbrev Ack Ack!
