@@ -98,3 +98,8 @@ export PATH="/usr/local/sbin:$PATH"
 # heroku autocomplete setup
 HEROKU_AC_BASH_SETUP_PATH=/Users/vladi/Library/Caches/heroku/autocomplete/bash_setup && test -f $HEROKU_AC_BASH_SETUP_PATH && source $HEROKU_AC_BASH_SETUP_PATH;
 export PATH="/usr/local/opt/tomcat@7/bin:$PATH"
+
+test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
+
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
