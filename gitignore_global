@@ -9,6 +9,7 @@ log/*.log
 rerun.txt
 tags
 !tags/
+tmp/
 tmp/**/*
 !tmp/cache/.keep
 *.pyc

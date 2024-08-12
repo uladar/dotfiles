@@ -1,21 +1,22 @@
 [user]
-	name = Vladislav Rovda
+	name = Vlad Ro
 	email = vladislav.rvd@gmail.com
 [color]
 	status = auto
 	interactive = auto
 	diff = auto
 	branch = auto
+	ui = true
 [giggle]
 	main-window-maximized = false
 	main-window-geometry = 292x64+0+48
 [push]
 	default = tracking
-#[heroku]
-#	account = personal
+[heroku]
+	account = personal
 [core]
-	editor = vim
-	excludesfile = /Users/vladi/.gitignore_global
+	editor = nvim
+	excludesfile = /Users/gv1d/.gitignore_global
 	autocrlf = input
 [filter "lfs"]
 	clean = git-lfs clean -- %f

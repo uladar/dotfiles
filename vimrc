@@ -10,14 +10,16 @@ if has("gui_running")
   colorscheme onedark
 elseif $COLORTERM == 'gnome-terminal'
   set term=gnome-256color
-  colorscheme ondedark
+  colorscheme onedark
 else
+
   colorscheme onedark
 endif
 set path+=**
 " important -------------------------------------------------------------------
 set nocompatible                                          "don't behave like VI
 " moving around, searching and patterns ---------------------------------------
+set hlsearch                                         "highlights search results
 set incsearch                                 "shows search matches as you type
 set showmatch                                          "shows matching brackets
 set smartcase                                              "if caps, watch case
@@ -37,13 +39,13 @@ filetype on
 filetype plugin on
 filetype indent on
 syntax on
-set hlsearch                                         "highlights search results
 highlight Pmenu ctermbg=238 gui=bold
 highlight vertsplit ctermfg=black
 "highlight NonText guifg=#4a4a59                    "invisible characters color
 "highlight SpecialKey guifg=#4a4a59                 "invisible characters color
 set spelllang=en                                    "list of accepted languages
-"set spell                                         "highlight spelling mistakes
+"set spell                                          "highlight spelling mistakes
+"set omnifunc=syntaxcomplete#Complete                "enable omni complettion i<C-X><C-O>
 " multiple windows ------------------------------------------------------------
 set laststatus=2                                       "always show status line
 set hidden              "don't unload a buffer when no longer shown in a window
@@ -54,8 +56,8 @@ set title                                        "show info in the window title
 " using the mouse -------------------------------------------------------------
 set mouse=a                                         "enable mouse for all modes
 " GUI -------------------------------------------------------------------------
-"set guifont=DejaVu\ Sans\ Mono:h11    "list of font names to be used in the GUI
-set guifont=JetBrains\ Mono:h11    "list of font names to be used in the GUI
+"set guifont=DejaVu\ Sans\ Mono:h11   "list of font names to be used in the GUI
+set guifont=JetBrains\ Mono:h12       "list of font names to be used in the GUI
 set guioptions-=L                         "remove left-hand scrollbar in vsplit
 set guioptions-=l                                   "remove left-hand scrollbar
 set guioptions-=b                         "remove bottom (horizontal) scrollbar
@@ -95,7 +97,7 @@ set updatetime=250                        "time msec suggested by vim-gitgutter
 set wildmode=list:longest          "specifies how command line completion works
 " set autochdir
 set wildignore=*.o,*.obj,*~,.byebug_history,*.log,*.gif,*.png,*.jpg
-set wildignore+=vendor/ruby,vendor/assets,vendor/assets/fonts,coverage,public/images,public/system,app/assets/images/**,tmp,bower_components,node_modules
+set wildignore+=vendor/ruby,vendor/assets,vendor/assets/fonts,coverage,public/images,public/system,app/assets/images/**,tmp,bower_components,node_modules,athena
 set wildmenu
 " executing external commands -------------------------------------------------
 " running make and jumping to errors ------------------------------------------
@@ -146,15 +148,20 @@ if has("autocmd")
   autocmd BufWritePre *.py,*.js,*.rb,*.coffee,*.erb,*.slim,*.skim,*.rake :call <SID>StripTrailingWhitespaces()
   "add spell checking and automatic wrapping at the recommended 72 columns to you commit messages.
   "https://robots.thoughtbot.com/5-useful-tips-for-a-better-commit-message
-  autocmd Filetype gitcommit setlocal spell textwidth=72
+  autocmd FileType gitcommit setlocal spell textwidth=72
   autocmd FileType nerdtree nmap <buffer> <leader>be :NERDTreeClose<CR>:BufExplorer<CR>
   autocmd FileType ruby setlocal keywordprg=ri "need to find option to set keywordprg only for buffer
-  autocmd FileType ruby set omnifunc=syntaxcomplete#Complete "enable Omni compltetion
+  autocmd FileType ruby set omnifunc=rubycomplete#Complete
   autocmd FileType ruby let g:rubycomplete_buffer_loading=1
   autocmd FileType ruby let g:rubycomplete_classes_in_global=1
   autocmd FileType ruby let g:rubycomplete_rails = 1
   autocmd FileType ruby let g:rubycomplete_load_gemfile = 1
-  autocmd filetype crontab setlocal nobackup nowritebackup
+  autocmd FileType crontab setlocal nobackup nowritebackup
+  autocmd FileType json nmap <buffer> <leader>fj :%!python -m json.tool
+  autocmd Filetype go setlocal tabstop=4 shiftwidth=4 softtabstop=4
+  "ts - show existing tab with 4 spaces width
+  "sw - when indenting with '>', use 4 spaces width
+  "sts - control <tab> and <bs> keys to match tabstop
 endif
 " functions -------------------------------------------------------------------
 function! <SID>StripTrailingWhitespaces()
@@ -169,7 +176,15 @@ function! <SID>StripTrailingWhitespaces()
     call cursor(l, c)
 endfunction
 " plugins related -------------------------------------------------------------
+" go-vim plugin specific commands
+let g:go_fmt_command = "goimports" "run `goimports` on your current file on every save. might be slow on large codebases, if so, just comment it out
+let g:go_auto_type_info = 1 "status line types/signatures.
+
+"au filetype go inoremap <buffer> . .<C-x><C-o> "autocomplete prompt will appear automatically whenever you press the dot (.)
+"let g:go_fmt_autosave = 0 " if you want to disable gofmt on save
+
 " syntastic -------------------------------------------------------------------
+let g:syntastic_check_on_open = 0
 let g:syntastic_auto_loc_list=1
 let g:syntastic_enable_signs=1
 let g:syntastic_mode_map = { 'passive_filetypes': ['sass', 'scss'] }
@@ -187,14 +202,20 @@ nmap <silent> <leader>tf :CommandTFlush<CR>
 let g:CommandTMaxFiles = 55000
 " ctags -----------------------------------------------------------------------
 let Tlist_Ctags_Cmd='/usr/local/bin/ctags'                       "only for OS X
-map <Leader>rt :!ctags --extra=+f -R * --exclude='*.js'<CR><CR>
+"map <Leader>rt :!ctags --extras=+f -R * --exclude='*.js' --exclude=tmp --exclude=athena<CR><CR>
+map <Leader>rt :!ctags --extras=+f -R --exclude='*.js' --exclude=tmp --exclude=athena --exclude=node_modules <CR><CR>
 " ack -------------------------------------------------------------------------
 cnoreabbrev Ack Ack!
 nnoremap <Leader>a :Ack!<Space>
-if executable('ag')
+if executable('rg')
+  let g:ackprg = 'rg --vimgrep'
+elseif executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
-
+" snipmate --------------------------------------------------------------------
+let g:snipMate = { 'snippet_version' : 1 }
+" airline ---------------------------------------------------------------------
+"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Comment code
 " ,#  -  shell, perl, etc
@@ -226,7 +247,6 @@ map ,* :s/^\(.*\)$/\/\* \1 \*\//<CR>
 map ,( :s/^\(.*\)$/\(\* \1 \*\)/<CR>
 map ,< :s/^\(.*\)$/<!-- \1 -->/<CR>
 map ,d :s/^\([/(]\*\\|<!--\) \(.*\) \(\*[/)]\\|-->\)$/\2/<CR>
-
 
 """""""""""""""""""""" USEFULL COMMANDS """"""""""""""""""""""""""
 
