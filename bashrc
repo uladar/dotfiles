@@ -63,14 +63,16 @@ export home_bin_path="$HOME/.bin"
 [[ -r $home_bin_path/bash-completion.bash ]] && . $home_bin_path/bash-completion.bash
 # brew bash-completion
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
+# go completetion
+if [ -f ~/.bin/go-completion.bash ]; then . ~/.bin/go-completion.bash; fi
 # etc -------------------------------------------------------------------------
 export EDITOR='nvim'
 export CLICOLOR=1;
 #export LSCOLORS=GxFxCxDxBxegedabagaced;
 export LSCOLORS=ExFxBxDxCxegedabagacad
-export LC_ALL=$LANG
-export LC_CTYPE="UTF-8"
 export LANG="en_US.UTF-8"
+export LC_CTYPE="UTF-8"
+unset LC_ALL
 export GREP_OPTIONS='--color=auto'
 export STORM_HOME="$HOME/.bin/apache-storm-0.9.3"
 GPG_TTY=$(tty)
@@ -82,7 +84,7 @@ alias gpw="cd ~/Projects/wasp"
 alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date'
 # Google Chrome
 alias chrome='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome'
-alias ff='/Applications/Firefox28.app/Contents/MacOS/firefox -p default-profile --browser &'
+alias ff='/Applications/Firefox.app/Contents/MacOS/firefox -p default-profile --browser &'
 # Show/hide hidden files in Finder
 alias show="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
 alias hide="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
@@ -95,6 +97,10 @@ alias path='echo -e ${PATH//:/\\n}'
 alias dbe='dotenv bundle exec'
 # add nodenv to path ----------------------------------------------------------
 [[ -r "/usr/local/bin/nodenv" ]] && eval "$(nodenv init -)"
+# add npm/bin to path ---------------------------------------------------------
+if command -v npm >/dev/null 2>&1; then
+  export PATH="$(npm config get prefix)/bin:$PATH"
+fi
 # Installing Qt and compiling capybara webkit ---------------------------------
 # https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit#macos-high-sierra-1013-macos-sierra-1012-el-capitan-1011-and-yosemite-1010
 #export PATH="$(brew --prefix qt@5.5)/bin:$PATH"
@@ -123,3 +129,17 @@ test -e "/usr/local/bin/rbenv" && eval "$(rbenv init -)"
 export YVM_DIR=/usr/local/opt/yvm
 [ -r $YVM_DIR/yvm.sh ] && . $YVM_DIR/yvm.sh
 export PATH="/usr/local/opt/redis@6.2/bin:$PATH"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# bum. What is bum????
+export BUM_INSTALL="$HOME/.bum"
+export PATH=$BUM_INSTALL/bin:$PATH
+
+export GOTMPDIR="$HOME/.cache/go-build-tmp"
+export PATH="$HOME/.local/bin:$PATH"
+
+# kimi-code
+export PATH="/Users/gv1d/.kimi-code/bin:$PATH"

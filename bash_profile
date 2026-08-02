@@ -1,6 +1,8 @@
 # Source .bashrc if exists
 [[ -r $HOME/.bashrc ]] && . $HOME/.bashrc
 
+# export BASH_ENV="$HOME/.rbenv_init"
+
 # when mysql2 gem failed to install
 #export PATH="/usr/local/opt/mysql@5.7/bin:$PATH"
 #export LDFLAGS="-L/usr/local/opt/mysql@5.7/lib"
