@@ -13,63 +13,74 @@ call plug#begin('~/.config/nvim/autoload/plugged')
   " If fzf has already been installed via Homebrew, use the existing fzf
   " Otherwise, install fzf. The `--all` flag makes fzf accessible outside of vim
   if isdirectory("/usr/local/opt/fzf")
-    Plug '/usr/local/opt/fzf'
+    Plug '/usr/local/opt/fzf' " Fast fuzzy finder binary
   else
-    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+    Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " Fast fuzzy finder binary
   endif
-  Plug 'junegunn/fzf.vim', { 'do': { -> fzf#install() } }
-  Plug 'mileszs/ack.vim'
-  "Plug 'elixir-lang/vim-elixir'
-  "Plug 'fatih/vim-go'
-  Plug 'pangloss/vim-javascript'
-  " better syntax support
-  Plug 'sheerun/vim-polyglot'
-  " file explorer
-  Plug 'scrooloose/NERDTree'
+  Plug 'junegunn/fzf.vim', { 'do': { -> fzf#install() } } " Vim integration for fzf search commands
+  Plug 'mileszs/ack.vim' " Search project files with ack or ag
+  "Plug 'elixir-lang/vim-elixir' " Elixir syntax and tooling (disabled)
+  "Plug 'fatih/vim-go' " Go language tooling (disabled)
+  Plug 'pangloss/vim-javascript' " JavaScript syntax highlighting
+  Plug 'sheerun/vim-polyglot' " Syntax and indentation support for many languages
+  " Plug 'scrooloose/NERDTree' " Legacy file explorer (disabled; Neo-tree is used)
   "
-  " auto pairs for '(' '[' '{'
-  Plug 'jiangmiao/auto-pairs'
+  Plug 'jiangmiao/auto-pairs' " Automatically insert and close brackets and quotes
   "
-  " a dark vim/neovim color scheme
-  Plug 'joshdick/onedark.vim'
+  Plug 'joshdick/onedark.vim' " One Dark color scheme
   "
-  " lean & mean status/tabline for vim that's light as air
-  Plug 'vim-airline/vim-airline'
-  " TODO: customize z section in status line
+  Plug 'vim-airline/vim-airline' " Lightweight status line and tab line
   "
-  Plug 'jlanzarotta/bufexplorer'
-  Plug 'airblade/vim-gitgutter'
-  Plug 'tpope/vim-surround'
-  Plug 'tpope/vim-rails'
-  Plug 'tpope/vim-bundler'
-  Plug 'tpope/vim-endwise'
-  Plug 'ap/vim-css-color'
-  Plug 'vim-scripts/tComment'
-  Plug 'janko-m/vim-test'
-  Plug 'pbrisbin/vim-mkdir'
-  Plug 'slim-template/vim-slim'
-  Plug 'tpope/vim-rake'
-  Plug 'tpope/vim-rhubarb'
-  Plug 'vim-ruby/vim-ruby'
-  Plug 'ryanoasis/vim-devicons'
-  Plug 'vwxyutarooo/nerdtree-devicons-syntax'
-  Plug 'coreyja/fzf.devicon.vim'
-  Plug 'kaicataldo/material.vim', { 'branch': 'main' } "material theme for vim
+  Plug 'neovim/nvim-lspconfig' " LSP client configurations
+  Plug 'jlanzarotta/bufexplorer' " Buffer list and navigation
+  Plug 'airblade/vim-gitgutter' " Git diff markers in the sign column
+  Plug 'tpope/vim-surround' " Add, change, and remove surrounding characters
+  Plug 'tpope/vim-rails' " Rails-aware navigation and commands
+  Plug 'tpope/vim-bundler' " Run Bundler commands from Vim
+  Plug 'tpope/vim-endwise' " Automatically insert closing Ruby and Vimscript keywords
+  Plug 'ap/vim-css-color' " Preview CSS color values
+  Plug 'vim-scripts/tComment' " Toggle code comments
+  Plug 'janko-m/vim-test' " Run project tests from Vim
+  Plug 'pbrisbin/vim-mkdir' " Create missing directories when saving files
+  Plug 'slim-template/vim-slim' " Slim template syntax and indentation
+  Plug 'tpope/vim-rake' " Run Rake tasks from Vim
+  Plug 'tpope/vim-rhubarb' " GitHub support for Fugitive-style workflows
+  Plug 'vim-ruby/vim-ruby' " Ruby syntax, indentation, and completion helpers
+  Plug 'ryanoasis/vim-devicons' " File type icons for Vim plugins and explorers
+  " Plug 'vwxyutarooo/nerdtree-devicons-syntax' " NERDTree icon syntax (disabled with NERDTree)
+  Plug 'coreyja/fzf.devicon.vim' " File icons in fzf results
+  Plug 'kaicataldo/material.vim', { 'branch': 'main' } " Material color scheme
   "
-  "Plug 'tpope/vim-eunuch'
-  "Plug 'tpope/vim-fugitive'
-  "Plug 'tpope/vim-projectionist'
-  "Plug 'tpope/vim-repeat'
+  " --- Completion stack ---
+  Plug 'hrsh7th/nvim-cmp' " Completion popup and completion engine
+  Plug 'hrsh7th/cmp-nvim-lsp' " LSP completion source for nvim-cmp
+  Plug 'hrsh7th/cmp-buffer' " Buffer text completion source
+  Plug 'hrsh7th/cmp-path' " Filesystem path completion source
+  Plug 'saadparwaiz1/cmp_luasnip' " LuaSnip completion source for nvim-cmp
+  Plug 'L3MON4D3/LuaSnip' " Snippet engine
+  " (optional) curated snippets:
+  " Plug 'rafamadriz/friendly-snippets' " Community snippet collection (optional)
+  "
+  "
+  Plug 'nvim-lua/plenary.nvim' " Lua utility library used by Neo-tree
+  Plug 'MunifTanjim/nui.nvim' " UI component library used by Neo-tree
+  Plug 'nvim-tree/nvim-web-devicons' " File type icons for Neo-tree
+  Plug 'nvim-neo-tree/neo-tree.nvim' " File explorer and project tree
+  "
+  "Plug 'tpope/vim-eunuch' " Unix file commands (disabled)
+  "Plug 'tpope/vim-fugitive' " Git commands inside Vim (disabled)
+  "Plug 'tpope/vim-projectionist' " Project navigation by file type (disabled)
+  "Plug 'tpope/vim-repeat' " Repeat plugin mappings with dot (disabled)
 
   if g:has_async
-    Plug 'dense-analysis/ale' "syntax checker
+    Plug 'dense-analysis/ale' " Asynchronous linting and fixing
   endif
 call plug#end()
 
 " GENERAL -----------------------------------------------------------------------
 set encoding=utf-8
 set fileencoding=utf-8
-set termencoding=utf-8
+" set termencoding=utf-8
 syntax on                                             "enable syntax highlighting
 set termguicolors
 " colorscheme onedark
@@ -94,6 +105,37 @@ set directory=~/.local/share/nvim/swap/    "list of directories for the swap fil
 
 let mapleader=","
 
+" Russian keyboard layout aliases for normal-mode commands. Both lowercase
+" and uppercase Cyrillic keys intentionally perform the same action.
+for [lhs, rhs] in [
+      \ ['р', 'h'], ['Р', 'h'],
+      \ ['о', 'j'], ['О', 'j'],
+      \ ['л', 'k'], ['Л', 'k'],
+      \ ['д', 'l'], ['Д', 'l'],
+      \ ['ц', 'w'], ['Ц', 'w'],
+      \ ['и', 'b'], ['И', 'b'],
+      \ ['у', 'e'], ['У', 'e']
+      \ ]
+  execute 'nnoremap ' . lhs . ' ' . rhs
+  execute 'vnoremap ' . lhs . ' ' . rhs
+  execute 'onoremap ' . lhs . ' ' . rhs
+endfor
+
+" Common editing commands while staying on the Russian layout.
+for [lhs, rhs] in [
+      \ ['ш', 'i'], ['Ш', 'i'],
+      \ ['ф', 'a'], ['Ф', 'a'],
+      \ ['щ', 'o'], ['Щ', 'o'],
+      \ ['в', 'd'], ['В', 'd'],
+      \ ['с', 'c'], ['С', 'c'],
+      \ ['м', 'v'], ['М', 'v'],
+      \ ['н', 'y'], ['Н', 'y'],
+      \ ['з', 'p'], ['З', 'p'],
+      \ ['ч', 'x'], ['Ч', 'x']
+      \ ]
+  execute 'nnoremap ' . lhs . ' ' . rhs
+endfor
+
 set listchars=tab:▸\ ,eol:¬,trail:·         "use the same symbols as TextMate for
                                                                "tabstops and EOLs
 " PLUGINS CONFIG ----------------------------------------------------------------
@@ -106,14 +148,111 @@ if executable('ag')
 endif
 
 " nerdtree toggle
-map <silent> <leader>n :NERDTreeToggle<CR>
-let g:NERDTreeWinPos="right"
-let g:NERDTreeWinSize=40
+" map <silent> <leader>n :NERDTreeToggle<CR>
+" let g:NERDTreeWinPos="right"
+" let g:NERDTreeWinSize=40
 
 " ALE
-let g:ale_completion_enabled = 1
-set omnifunc=ale#completion#OmniFunc
-let g:ale_completion_autoimport = 1
+" let g:ale_completion_enabled = 1
+" set omnifunc=ale#completion#OmniFunc
+" let g:ale_completion_autoimport = 1
+
+let g:ale_linters = { 'ruby': ['rubocop', 'ruby'] }
+let g:ale_linters_explicit = 1
+let g:ale_linters_ignore = { 'ruby': ['solargraph'] }
+
+let g:ale_completion_enabled = 0
+set omnifunc=
+let g:ale_completion_autoimport = 0
+
+
+nnoremap <leader>e  :lua vim.diagnostic.open_float()<CR>
+nnoremap [d         :lua vim.diagnostic.goto_prev()<CR>
+nnoremap ]d         :lua vim.diagnostic.goto_next()<CR>
+nnoremap <leader>q  :lua vim.diagnostic.setloclist()<CR>
+
+lua << EOF
+local util = require('lspconfig.util')
+local cmp_caps = require('cmp_nvim_lsp').default_capabilities()
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'ruby' },
+  callback = function(args)
+    for _, c in ipairs(vim.lsp.get_clients({ bufnr = args.buf })) do
+      if c.name == 'ruby_lsp' then return end
+    end
+    local root = util.root_pattern('Gemfile', '.git')(vim.api.nvim_buf_get_name(args.buf)) or vim.loop.cwd()
+
+    vim.lsp.start({
+      name = 'ruby_lsp',
+      cmd = { 'bundle', 'exec', 'ruby-lsp' }, -- or { 'ruby-lsp' }
+      root_dir = root,
+      init_options = {
+        formatter = 'rubocop',
+        linters = { 'rubocop' },
+        experimentalFeaturesEnabled = true,
+      },
+      capabilities = cmp_caps,  -- <<< enables LSP-powered completion
+    })
+  end,
+})
+EOF
+
+
+" Recommended for cmp popup behavior
+set completeopt=menu,menuone,noselect
+
+lua << EOF
+local cmp = require('cmp')
+local luasnip = require('luasnip')
+
+-- (optional) load VSCode-style snippets if you enabled friendly-snippets
+-- require('luasnip.loaders.from_vscode').lazy_load()
+
+cmp.setup({
+  snippet = {
+    expand = function(args) luasnip.lsp_expand(args.body) end,
+  },
+  mapping = cmp.mapping.preset.insert({
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<CR>']      = cmp.mapping.confirm({ select = false }), -- Accept selected
+    ['<C-e>']     = cmp.mapping.abort(),
+    ['<Tab>']     = cmp.mapping(function(fallback)
+      if cmp.visible() then cmp.select_next_item()
+      elseif luasnip.expand_or_jumpable() then luasnip.expand_or_jump()
+      else fallback() end
+    end, { 'i', 's' }),
+    ['<S-Tab>']   = cmp.mapping(function(fallback)
+      if cmp.visible() then cmp.select_prev_item()
+      elseif luasnip.jumpable(-1) then luasnip.jump(-1)
+      else fallback() end
+    end, { 'i', 's' }),
+  }),
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'path' },
+    { name = 'buffer' },
+    { name = 'luasnip' },
+  },
+  experimental = { ghost_text = false },
+})
+EOF
+
+lua << EOF
+require('neo-tree').setup({
+  close_if_last_window = true,
+  sources = { "filesystem", "buffers", "git_status" }, -- add "document_symbols" if you like
+  filesystem = {
+    follow_current_file = { enabled = true },
+    use_libuv_file_watcher = true,
+    filtered_items = { hide_dotfiles = false, hide_gitignored = true },
+  },
+  window = { width = 40 },
+})
+-- Keymaps similar to your old flow
+vim.keymap.set('n', '<leader>n', ':Neotree toggle right reveal<CR>', {silent=true})
+EOF
+
 
 " SHRORCUTS ---------------------------------------------------------------------
 " show invisible character
@@ -146,7 +285,9 @@ if has("autocmd")
   autocmd BufNewFile,BufRead *.prawn set ft=ruby
   autocmd BufNewFile,BufRead *.skim set ft=slim
   autocmd BufNewFile,BufRead /opt/nginx/conf/* set ft=nginx
-  autocmd FileType nerdtree nmap <buffer> <leader>be :NERDTreeClose<CR>:BufExplorer<CR>
+  " autocmd FileType nerdtree nmap <buffer> <leader>be :NERDTreeClose<CR>:BufExplorer<CR>
+  " When in a neo-tree window: <leader>be closes it, then opens BufExplorer
+  autocmd FileType neo-tree nnoremap <buffer> <silent> <leader>be :Neotree close<CR>:BufExplorer<CR>
   "add spell checking and automatic wrapping at the recommended 72 columns to you commit messages.
   "https://robots.thoughtbot.com/5-useful-tips-for-a-better-commit-message
   autocmd FileType gitcommit setlocal spell textwidth=72
@@ -220,4 +361,3 @@ let s:colors = {
 " :g/^$/d           deletes blank lines
 " :g - creates a global command ; /^$/ search pattern ; /d - command to execute
 "
-
