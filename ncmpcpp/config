@@ -3,11 +3,10 @@ lyrics_directory = ~/.ncmpcpp/lyrics
 mpd_music_dir = /Volumes/MacOS/Music/iTunes/iTunes Media/Music 
 
 # visualizer
-visualizer_fifo_path = "/tmp/mpd.fifo"
-visualizer_output_name = "my_fifo"
-visualizer_sync_interval = "12"
-visualizer_type = "wave" (spectrum/wave)
-#visualizer_type = wave
+# visualizer_fifo_path = "/tmp/mpd.fifo"
+# visualizer_output_name = "my_fifo"
+# visualizer_sync_interval = "12"
+# visualizer_type = "wave" (spectrum/wave)
 visualizer_in_stereo = "yes"
 visualizer_look = "+|"
 # visualizer_look = "▋▋"
