@@ -226,15 +226,9 @@ autoload -Uz compinit
 compinit
 zmodload -i zsh/complist
 
-# Complete Rails tasks for the application's local binstub.
-# The task list is generated from the current project, so custom tasks such
-# as `ksef:sync` and `credentials:edit` are available automatically.
-_bin_rails_tasks() {
-  local -a tasks
-  tasks=("${(@f)$(bin/rails -T 2>/dev/null | awk '{print $2}')}")
-  _describe 'Rails task' tasks
-}
-compdef _bin_rails_tasks bin/rails
+# Reuse Oh My Zsh's static Rails completion for the local application binstub.
+# This avoids booting Rails every time completion is triggered.
+compdef _rails bin/rails
 
 # Complete SSH aliases from ~/.ssh/config before falling back to known_hosts.
 _ssh_hosts() {
