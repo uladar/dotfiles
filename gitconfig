@@ -25,3 +25,5 @@
 	process = git-lfs filter-process
 [github]
 	user = uladar
+[credential "https://git.heroku.com"]
+	helper = !heroku git:credentials

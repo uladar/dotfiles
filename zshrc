@@ -1,113 +1,15 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-
-# Just offer a reminder every few days, if there are updates available:
+# Oh My Zsh
 zstyle ':omz:update' mode reminder
-
-# Path to your oh-my-zsh installation.
-export ZSH="/Users/gv1d/.oh-my-zsh"
-
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME=""
-
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment one of the following lines to change the auto-update behavior
-# zstyle ':omz:update' mode disabled  # disable automatic updates
-# zstyle ':omz:update' mode auto      # update automatically without asking
-# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
-
-# Uncomment the following line to change how often to auto-update (in days).
-# zstyle ':omz:update' frequency 13
-
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# You can also set it to another string to have that shown instead of the default red dots.
-# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
 plugins=(git history-substring-search rails bundler)
-
 source $ZSH/oh-my-zsh.sh
 
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
-# -----------------------------------------------------------------------------
 # Personal shell setup (ported from ~/.dotfiles/bashrc)
-# -----------------------------------------------------------------------------
 
-# Keep existing toolchains available in zsh.
+# PATH and toolchains
+# Keep legacy toolchains available without placing npm's global prefix ahead
+# of nodenv shims (the active project version must win).
 path=(
   "$HOME/.bin"
   "/usr/local/opt/tomcat@7/bin"
@@ -133,6 +35,8 @@ export home_bin_path="$HOME/.bin"
 export BUN_INSTALL="$HOME/.bun"
 export BUM_INSTALL="$HOME/.bum"
 export GOTMPDIR="$HOME/.cache/go-build-tmp"
+export TMPDIR="$HOME/.cache/tmp"
+mkdir -p "$GOTMPDIR" "$TMPDIR"
 export YVM_DIR="/usr/local/opt/yvm"
 export EDITOR='nvim'
 export CLICOLOR=1
@@ -144,11 +48,14 @@ export GREP_OPTIONS='--color=auto'
 export STORM_HOME="$HOME/.bin/apache-storm-0.9.3"
 export DISABLE_SPRING=true
 
+# Ruby/OpenSSL compatibility for projects that still require OpenSSL 1.1.
 if (( $+commands[brew] )) && brew list openssl@1.1 &>/dev/null; then
   export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
 fi
 
-# Environment managers. Initialize only when installed.
+# Runtime managers
+# Initialize only when installed. nodenv must be initialized before npm's
+# global bin fallback below, so project .node-version files take precedence.
 if (( $+commands[nodenv] )); then
   eval "$(nodenv init - zsh)"
 fi
@@ -161,7 +68,8 @@ if [[ -r "$YVM_DIR/yvm.sh" ]]; then
   source "$YVM_DIR/yvm.sh"
 fi
 
-if (( $+commands[npm] )); then
+# Only use npm's global prefix when nodenv is not installed.
+if (( ! $+commands[nodenv] && $+commands[npm] )); then
   npm_bin="$(npm config get prefix 2>/dev/null)/bin"
   [[ -d "$npm_bin" ]] && path=("$npm_bin" $path)
   export PATH
@@ -211,9 +119,12 @@ setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_SAVE_NO_DUPS
 setopt APPEND_HISTORY
 setopt INC_APPEND_HISTORY
-setopt SHARE_HISTORY
 
-HISTFILE="$HOME/.zsh_history"
+if [[ -n "$TMUX_PANE" ]]; then
+  HISTFILE="$HOME/.zsh_history_tmux_${TMUX_PANE//[^A-Za-z0-9_-]/_}"
+else
+  HISTFILE="$HOME/.zsh_history"
+fi
 HISTSIZE=100000
 SAVEHIST=100000
 
@@ -264,6 +175,7 @@ unset HEROKU_AC_ZSH_SETUP_PATH
 
 # fzf gives fish-like history/file/directory pickers:
 # Ctrl-R = history, Ctrl-T = files, Alt-C = directories.
+# Interactive helpers
 if (( $+commands[fzf] )); then
   eval "$(fzf --zsh)"
 
@@ -284,7 +196,7 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias reload-zsh='source ~/.zshrc'
 
-# Compact prompt: keep the project path, omit git status, and show a runtime
+# Prompt: keep the project path, omit git status, and show a runtime
 # only when the current project declares that runtime.
 prompt_theme_color() {
   local theme_file="$1"
@@ -392,3 +304,34 @@ prompt_git_branch() {
 setopt PROMPT_SUBST
 precmd_functions+=(prompt_refresh_theme)
 prompt_refresh_theme
+
+# Keep Up/Down history local to the current tmux pane, while Ctrl-R searches
+# every zsh history file (the shared history file and all tmux-pane files).
+unsetopt SHARE_HISTORY
+
+global_history_widget() {
+  local selected
+  local -a history_files
+
+  history_files=(
+    "$HOME"/.zsh_history(N)
+    "$HOME"/.zsh_history_tmux_*(N)
+  )
+
+  (( ${#history_files} )) || return
+
+  selected="$({
+    for history_file in $history_files; do
+      sed -E 's/^: [0-9]+:[0-9]+;//' "$history_file"
+    done
+  } | awk 'NF' | sort -u | fzf --height=40% --reverse --no-sort --query="$BUFFER")"
+
+  [[ -n "$selected" ]] || return
+  BUFFER="$selected"
+  CURSOR=${#BUFFER}
+  zle redisplay
+}
+
+zle -N global_history_widget
+bindkey -M emacs '^R' global_history_widget
+bindkey -M viins '^R' global_history_widget
