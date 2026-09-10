@@ -10,10 +10,14 @@ endif
 let g:has_async = v:version >= 800 || has('nvim')
 
 call plug#begin('~/.config/nvim/autoload/plugged')
-  " If fzf has already been installed via Homebrew, use the existing fzf
-  " Otherwise, install fzf. The `--all` flag makes fzf accessible outside of vim
-  if isdirectory("/usr/local/opt/fzf")
-    Plug '/usr/local/opt/fzf' " Fast fuzzy finder binary
+  " Use the native Homebrew fzf when available; otherwise install the plugin.
+  let g:brew_fzf = exists('$HOMEBREW_PREFIX') ? $HOMEBREW_PREFIX . '/opt/fzf' : ''
+  if empty(g:brew_fzf) && executable('brew')
+    let g:brew_fzf = trim(system('brew --prefix fzf 2>/dev/null'))
+  endif
+  if isdirectory(g:brew_fzf)
+    " Fast fuzzy finder binary from native Homebrew.
+    execute 'Plug ' . string(g:brew_fzf)
   else
     Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " Fast fuzzy finder binary
   endif
@@ -22,7 +26,6 @@ call plug#begin('~/.config/nvim/autoload/plugged')
   "Plug 'elixir-lang/vim-elixir' " Elixir syntax and tooling (disabled)
   "Plug 'fatih/vim-go' " Go language tooling (disabled)
   Plug 'pangloss/vim-javascript' " JavaScript syntax highlighting
-  Plug 'sheerun/vim-polyglot' " Syntax and indentation support for many languages
   " Plug 'scrooloose/NERDTree' " Legacy file explorer (disabled; Neo-tree is used)
   "
   Plug 'jiangmiao/auto-pairs' " Automatically insert and close brackets and quotes
@@ -32,7 +35,6 @@ call plug#begin('~/.config/nvim/autoload/plugged')
   Plug 'vim-airline/vim-airline' " Lightweight status line and tab line
   "
   Plug 'neovim/nvim-lspconfig' " LSP client configurations
-  Plug 'jlanzarotta/bufexplorer' " Buffer list and navigation
   Plug 'airblade/vim-gitgutter' " Git diff markers in the sign column
   Plug 'tpope/vim-surround' " Add, change, and remove surrounding characters
   Plug 'tpope/vim-rails' " Rails-aware navigation and commands
@@ -72,9 +74,6 @@ call plug#begin('~/.config/nvim/autoload/plugged')
   "Plug 'tpope/vim-projectionist' " Project navigation by file type (disabled)
   "Plug 'tpope/vim-repeat' " Repeat plugin mappings with dot (disabled)
 
-  if g:has_async
-    Plug 'dense-analysis/ale' " Asynchronous linting and fixing
-  endif
 call plug#end()
 
 " GENERAL -----------------------------------------------------------------------
@@ -105,45 +104,16 @@ set directory=~/.local/share/nvim/swap/    "list of directories for the swap fil
 
 let mapleader=","
 
-" Russian keyboard layout aliases for normal-mode commands. Both lowercase
-" and uppercase Cyrillic keys intentionally perform the same action.
-for [lhs, rhs] in [
-      \ ['р', 'h'], ['Р', 'h'],
-      \ ['о', 'j'], ['О', 'j'],
-      \ ['л', 'k'], ['Л', 'k'],
-      \ ['д', 'l'], ['Д', 'l'],
-      \ ['ц', 'w'], ['Ц', 'w'],
-      \ ['и', 'b'], ['И', 'b'],
-      \ ['у', 'e'], ['У', 'e']
-      \ ]
-  execute 'nnoremap ' . lhs . ' ' . rhs
-  execute 'vnoremap ' . lhs . ' ' . rhs
-  execute 'onoremap ' . lhs . ' ' . rhs
-endfor
-
-" Common editing commands while staying on the Russian layout.
-for [lhs, rhs] in [
-      \ ['ш', 'i'], ['Ш', 'i'],
-      \ ['ф', 'a'], ['Ф', 'a'],
-      \ ['щ', 'o'], ['Щ', 'o'],
-      \ ['в', 'd'], ['В', 'd'],
-      \ ['с', 'c'], ['С', 'c'],
-      \ ['м', 'v'], ['М', 'v'],
-      \ ['н', 'y'], ['Н', 'y'],
-      \ ['з', 'p'], ['З', 'p'],
-      \ ['ч', 'x'], ['Ч', 'x']
-      \ ]
-  execute 'nnoremap ' . lhs . ' ' . rhs
-endfor
+lua require('user.keymaps')
 
 set listchars=tab:▸\ ,eol:¬,trail:·         "use the same symbols as TextMate for
                                                                "tabstops and EOLs
 " PLUGINS CONFIG ----------------------------------------------------------------
 " ack
 cnoreabbrev Ack Ack!
-nnoremap <Leader>a :Ack!<Space>
-nnoremap <Leader>A :Ack! -Q<Space>
-if executable('ag')
+if executable('rg')
+  let g:ackprg = 'rg --vimgrep'
+elseif executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
 
@@ -152,51 +122,7 @@ endif
 " let g:NERDTreeWinPos="right"
 " let g:NERDTreeWinSize=40
 
-" ALE
-" let g:ale_completion_enabled = 1
-" set omnifunc=ale#completion#OmniFunc
-" let g:ale_completion_autoimport = 1
-
-let g:ale_linters = { 'ruby': ['rubocop', 'ruby'] }
-let g:ale_linters_explicit = 1
-let g:ale_linters_ignore = { 'ruby': ['solargraph'] }
-
-let g:ale_completion_enabled = 0
-set omnifunc=
-let g:ale_completion_autoimport = 0
-
-
-nnoremap <leader>e  :lua vim.diagnostic.open_float()<CR>
-nnoremap [d         :lua vim.diagnostic.goto_prev()<CR>
-nnoremap ]d         :lua vim.diagnostic.goto_next()<CR>
-nnoremap <leader>q  :lua vim.diagnostic.setloclist()<CR>
-
-lua << EOF
-local util = require('lspconfig.util')
-local cmp_caps = require('cmp_nvim_lsp').default_capabilities()
-
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'ruby' },
-  callback = function(args)
-    for _, c in ipairs(vim.lsp.get_clients({ bufnr = args.buf })) do
-      if c.name == 'ruby_lsp' then return end
-    end
-    local root = util.root_pattern('Gemfile', '.git')(vim.api.nvim_buf_get_name(args.buf)) or vim.loop.cwd()
-
-    vim.lsp.start({
-      name = 'ruby_lsp',
-      cmd = { 'bundle', 'exec', 'ruby-lsp' }, -- or { 'ruby-lsp' }
-      root_dir = root,
-      init_options = {
-        formatter = 'rubocop',
-        linters = { 'rubocop' },
-        experimentalFeaturesEnabled = true,
-      },
-      capabilities = cmp_caps,  -- <<< enables LSP-powered completion
-    })
-  end,
-})
-EOF
+lua require('user.lsp')
 
 
 " Recommended for cmp popup behavior
@@ -249,22 +175,14 @@ require('neo-tree').setup({
   },
   window = { width = 40 },
 })
--- Keymaps similar to your old flow
-vim.keymap.set('n', '<leader>n', ':Neotree toggle right reveal<CR>', {silent=true})
 EOF
 
 
 " SHRORCUTS ---------------------------------------------------------------------
 " show invisible character
-nmap <leader>l :set list!<CR>
 " strip trailing whitespaces
 nnoremap <silent> <F5> :call <SID>StripTrailingWhitespaces()<CR>
-nnoremap <c-p> :GFiles<cr>
-nnoremap <c-0> :Files<cr>
 " nnoremap <M-P> :Files<cr> "TODO: map this to smth usefull
-nmap <leader><space> :nohlsearch<CR>
-"edit ~/.vimrc in new tab
-nmap <leader>evrc :tabedit $MYVIMRC<CR>
 
 " ABBREVIATIONS -----------------------------------------------------------------
 cnoreabbrev W w
@@ -285,15 +203,10 @@ if has("autocmd")
   autocmd BufNewFile,BufRead *.prawn set ft=ruby
   autocmd BufNewFile,BufRead *.skim set ft=slim
   autocmd BufNewFile,BufRead /opt/nginx/conf/* set ft=nginx
-  " autocmd FileType nerdtree nmap <buffer> <leader>be :NERDTreeClose<CR>:BufExplorer<CR>
-  " When in a neo-tree window: <leader>be closes it, then opens BufExplorer
-  autocmd FileType neo-tree nnoremap <buffer> <silent> <leader>be :Neotree close<CR>:BufExplorer<CR>
   "add spell checking and automatic wrapping at the recommended 72 columns to you commit messages.
   "https://robots.thoughtbot.com/5-useful-tips-for-a-better-commit-message
   autocmd FileType gitcommit setlocal spell textwidth=72
   " START """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-  "autocmd FileType ruby let g:ruby_host_prog = '~/.rbenv/shims/neovim-ruby-host'
-  "autocmd FileType ruby let g:ruby_path = system('echo $HOME/.rbenv/shims')
   "autocmd FileType ruby set omnifunc=rubycomplete#Complete
   " related to vim-ruby plugin config
   "autocmd FileType ruby let g:rubycomplete_buffer_loading=1

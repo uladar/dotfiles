@@ -5,27 +5,23 @@ ZSH_THEME=""
 plugins=(git history-substring-search rails bundler)
 source $ZSH/oh-my-zsh.sh
 
-# Personal shell setup (ported from ~/.dotfiles/bashrc)
+# Personal shell setup for Apple Silicon
 
-# PATH and toolchains
-# Keep legacy toolchains available without placing npm's global prefix ahead
-# of nodenv shims (the active project version must win).
+# PATH and toolchains. Resolve Homebrew dynamically so this works with the
+# native /opt/homebrew installation on Apple Silicon.
+if (( $+commands[brew] )); then
+  brew_prefix="$(brew --prefix)"
+  path=("$brew_prefix/bin" "$brew_prefix/sbin" $path)
+  unset brew_prefix
+fi
+
 path=(
   "$HOME/.bin"
-  "/usr/local/opt/tomcat@7/bin"
-  "/usr/local/opt/qt@5.5/bin"
-  "/usr/local/opt/icu4c/bin"
-  "/usr/local/opt/icu4c/sbin"
-  "$HOME/Library/Python/2.7/bin"
-  "/usr/local/opt/ruby/bin"
   "$HOME/.cargo/bin"
-  "/usr/local/sbin"
-  "$HOME/.rbenv/bin"
-  "/usr/local/opt/redis@6.2/bin"
   "$HOME/.bun/bin"
   "$HOME/.bum/bin"
   "$HOME/.local/bin"
-  "/Users/gv1d/.kimi-code/bin"
+  "$HOME/.kimi-code/bin"
   $path
 )
 export PATH
@@ -37,7 +33,6 @@ export BUM_INSTALL="$HOME/.bum"
 export GOTMPDIR="$HOME/.cache/go-build-tmp"
 export TMPDIR="$HOME/.cache/tmp"
 mkdir -p "$GOTMPDIR" "$TMPDIR"
-export YVM_DIR="/usr/local/opt/yvm"
 export EDITOR='nvim'
 export CLICOLOR=1
 export LSCOLORS='ExFxBxDxCxegedabagacad'
@@ -48,32 +43,15 @@ export GREP_OPTIONS='--color=auto'
 export STORM_HOME="$HOME/.bin/apache-storm-0.9.3"
 export DISABLE_SPRING=true
 
-# Ruby/OpenSSL compatibility for projects that still require OpenSSL 1.1.
-if (( $+commands[brew] )) && brew list openssl@1.1 &>/dev/null; then
-  export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
+# Runtime manager. mise reads .tool-versions, .ruby-version and .node-version
+# while preserving the existing per-project version files.
+if (( $+commands[mise] )); then
+  eval "$(mise activate zsh)"
 fi
 
-# Runtime managers
-# Initialize only when installed. nodenv must be initialized before npm's
-# global bin fallback below, so project .node-version files take precedence.
-if (( $+commands[nodenv] )); then
-  eval "$(nodenv init - zsh)"
-fi
-
-if [[ -x /usr/local/bin/rbenv ]]; then
-  eval "$(rbenv init - zsh)"
-fi
-
-if [[ -r "$YVM_DIR/yvm.sh" ]]; then
-  source "$YVM_DIR/yvm.sh"
-fi
-
-# Only use npm's global prefix when nodenv is not installed.
-if (( ! $+commands[nodenv] && $+commands[npm] )); then
-  npm_bin="$(npm config get prefix 2>/dev/null)/bin"
-  [[ -d "$npm_bin" ]] && path=("$npm_bin" $path)
-  export PATH
-  unset npm_bin
+# Search shell history interactively and optionally sync it between machines.
+if (( $+commands[atuin] )); then
+  eval "$(atuin init zsh)"
 fi
 
 if [[ -t 1 ]]; then
@@ -85,6 +63,8 @@ alias gp='cd ~/Projects'
 alias gpw='cd ~/Projects/wasp'
 alias chrome='/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome'
 alias ff='/Applications/Firefox.app/Contents/MacOS/firefox -p default-profile --browser &'
+alias vi='nvim'
+alias vim='nvim'
 alias show='defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder'
 alias hide='defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder'
 alias dbe='dotenv bundle exec'
@@ -257,9 +237,7 @@ prompt_runtime_versions() {
   local version marker
 
   if marker="$(prompt_project_file .ruby-version)"; then
-    if (( $+commands[rbenv] )); then
-      version="$(rbenv version-name 2>/dev/null)"
-    elif (( $+commands[ruby] )); then
+    if (( $+commands[ruby] )); then
       version="$(ruby -e 'print RUBY_VERSION' 2>/dev/null)"
     fi
     if [[ -n "$version" && "$version" != system ]]; then
@@ -281,9 +259,7 @@ prompt_runtime_versions() {
 
   version=''
   if marker="$(prompt_project_file .node-version 2>/dev/null)" || marker="$(prompt_project_file .nvmrc 2>/dev/null)"; then
-    if (( $+commands[nodenv] )); then
-      version="$(nodenv version-name 2>/dev/null)"
-    elif (( $+commands[node] )); then
+    if (( $+commands[node] )); then
       version="$(node --version 2>/dev/null)"
     fi
     version="${version#v}"

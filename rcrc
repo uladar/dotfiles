@@ -1,0 +1,3 @@
+# rcm configuration for the Apple Silicon dotfiles checkout.
+DOTFILES_DIRS=("$HOME/.dotfiles_arm64")
+EXCLUDES="README-arm64.md Brewfile vimrc"

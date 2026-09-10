@@ -1,0 +1,45 @@
+# Rails / Ruby
+aki77.rails-db-schema
+aki77.rails-i18n
+aki77.rails-partial
+aki77.rails-routes
+castwide.ruby-debug
+hjleochen.rails-nav
+koichisasada.vscode-rdbg
+misogi.ruby-rubocop
+shopify.ruby-lsp
+
+# Templates and frontend
+aliariff.slim-lint
+aliariff.vscode-erb-beautify
+angular.ng-template
+gencer.html-slim-scss-css-class-completion
+marcoroth.herb-lsp
+marcoroth.stimulus-lsp
+sianglim.slim
+
+# JavaScript / Go / Elixir / YAML
+dbaeumer.vscode-eslint
+esbenp.prettier-vscode
+golang.go
+jakebecker.elixir-ls
+redhat.vscode-yaml
+standard.vscode-standard
+
+# Git, databases and files
+bajdzis.vscode-database
+eamodio.gitlens
+github.vscode-github-actions
+mechatroner.rainbow-csv
+ms-ossdata.vscode-pgsql
+irongeek.vscode-env
+
+# Debugging, terminal and theme
+firefox-devtools.vscode-firefox-debug
+formulahendry.code-runner
+openai.chatgpt
+vaughan.rdoc-readme
+zhuangtongfa.material-theme
+
+# Optional container workflow; install manually if Docker is used.
+# ms-vscode-remote.remote-containers

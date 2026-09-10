@@ -16,7 +16,7 @@
 	account = personal
 [core]
 	editor = nvim
-	excludesfile = /Users/gv1d/.gitignore_global
+	excludesfile = ~/.gitignore_global
 	autocrlf = input
 [filter "lfs"]
 	clean = git-lfs clean -- %f
