@@ -1,5 +1,3 @@
-tap "homebrew/bundle"
-
 # Core CLI and shell workflow
 brew "atuin" # searchable shell history with optional sync
 brew "bat"
@@ -34,7 +32,7 @@ brew "vips"
 brew "imagemagick"
 
 # Local development services; run them with `brew services`, when needed.
-brew "postgresql@17"
+brew "postgresql@18"
 brew "redis"
 brew "rmpc"
 
@@ -49,7 +47,7 @@ brew "cloudflared"
 # Terminal and editor applications
 cask "alacritty"
 cask "brave-browser"
-cask "docker"
+cask "docker-desktop"
 cask "font-jetbrains-mono-nerd-font"
 cask "firefox"
 cask "google-chrome"
