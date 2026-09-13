@@ -7,13 +7,24 @@ the legacy `vimrc` is intentionally not installed.
 Install the native tools on the new Mac:
 
 ```sh
-brew install rcm mise fzf neovim tmux
+brew bundle --file="$HOME/.dotfiles_arm64/Brewfile"
+```
+
+Install Alacritty from the official signed DMG because the Homebrew cask is
+currently disabled by Gatekeeper:
+
+https://github.com/alacritty/alacritty/releases
+
+Install ChromeDriver separately only if browser tests require it. The
+Homebrew cask is currently disabled by Gatekeeper; Chrome for Testing also
+provides matching driver downloads:
+
+https://googlechromelabs.github.io/chrome-for-testing/
 
 Install TPM for the tmux plugins:
 
 ```sh
 git clone https://github.com/tmux-plugins/tpm "$HOME/.tmux/plugins/tpm"
-```
 ```
 
 Preview the files that `rcup` will manage:

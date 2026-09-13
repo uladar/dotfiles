@@ -45,7 +45,6 @@ brew "awscli"
 brew "cloudflared"
 
 # Terminal and editor applications
-cask "alacritty"
 cask "brave-browser"
 cask "docker-desktop"
 cask "font-jetbrains-mono-nerd-font"
@@ -53,6 +52,5 @@ cask "firefox"
 cask "google-chrome"
 cask "visual-studio-code"
 
-# Browser drivers for system/integration tests
-brew "chromedriver"
+# Browser driver for system/integration tests
 brew "geckodriver"
