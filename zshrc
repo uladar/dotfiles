@@ -37,7 +37,7 @@ export EDITOR='nvim'
 export CLICOLOR=1
 export LSCOLORS='ExFxBxDxCxegedabagacad'
 export LANG='en_US.UTF-8'
-export LC_CTYPE='UTF-8'
+export LC_CTYPE='en_US.UTF-8'
 unset LC_ALL
 export GREP_OPTIONS='--color=auto'
 export STORM_HOME="$HOME/.bin/apache-storm-0.9.3"
@@ -153,13 +153,9 @@ if [[ -r "$HEROKU_AC_ZSH_SETUP_PATH" ]]; then
 fi
 unset HEROKU_AC_ZSH_SETUP_PATH
 
-# fzf gives fish-like history/file/directory pickers:
-# Ctrl-R = history, Ctrl-T = files, Alt-C = directories.
-# Interactive helpers
+# Keep fzf available for explicit commands without installing its global
+# history/file/directory key bindings; Atuin owns Ctrl-R.
 if (( $+commands[fzf] )); then
-  eval "$(fzf --zsh)"
-
-  # Keep fzf widgets, but let zsh handle normal Tab completion.
   bindkey -M emacs '^I' expand-or-complete
   bindkey -M viins '^I' expand-or-complete
   bindkey -M vicmd '^I' expand-or-complete
@@ -281,33 +277,5 @@ setopt PROMPT_SUBST
 precmd_functions+=(prompt_refresh_theme)
 prompt_refresh_theme
 
-# Keep Up/Down history local to the current tmux pane, while Ctrl-R searches
-# every zsh history file (the shared history file and all tmux-pane files).
+# Keep Up/Down history local to the current tmux pane.
 unsetopt SHARE_HISTORY
-
-global_history_widget() {
-  local selected
-  local -a history_files
-
-  history_files=(
-    "$HOME"/.zsh_history(N)
-    "$HOME"/.zsh_history_tmux_*(N)
-  )
-
-  (( ${#history_files} )) || return
-
-  selected="$({
-    for history_file in $history_files; do
-      sed -E 's/^: [0-9]+:[0-9]+;//' "$history_file"
-    done
-  } | awk 'NF' | sort -u | fzf --height=40% --reverse --no-sort --query="$BUFFER")"
-
-  [[ -n "$selected" ]] || return
-  BUFFER="$selected"
-  CURSOR=${#BUFFER}
-  zle redisplay
-}
-
-zle -N global_history_widget
-bindkey -M emacs '^R' global_history_widget
-bindkey -M viins '^R' global_history_widget
