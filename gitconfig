@@ -27,3 +27,7 @@
 	user = uladar
 [credential "https://git.heroku.com"]
 	helper = !heroku git:credentials
+[gpg]
+	format = ssh
+[commit]
+	gpgsign = true
